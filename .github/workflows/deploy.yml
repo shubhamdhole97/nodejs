@@ -31,7 +31,7 @@ jobs:
             fi
 
             # Navigate to the app directory
-            cd /home/ubuntu/my-node-app
+            cd /home/ubuntu
 
             # Pull the latest changes if the repo already exists
             git pull origin main
