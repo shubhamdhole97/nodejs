@@ -23,6 +23,18 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            # Update the system and install Node.js
+            sudo apt update -y
+            sudo apt install -y curl
+
+            # Install Node.js (for Ubuntu 20.04 and newer versions)
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt install -y nodejs
+
+            # Check Node.js and npm version
+            node -v
+            npm -v
+
             # Check if the repo directory exists
             if [ ! -d "/home/ubuntu/my-node-app" ]; then
               # Clone the repo if it doesn't exist
@@ -31,16 +43,16 @@ jobs:
             fi
 
             # Navigate to the app directory
-            cd /home/ubuntu
+            cd /home/ubuntu/my-node-app
 
             # Pull the latest changes if the repo already exists
             git pull origin main
 
-            # Install dependencies and restart app
+            # Install dependencies
             npm install
+
+            # Restart the app using pm2 or another method
             pm2 restart all  # or any other method to restart your Node.js app
           EOF
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
-
-          
