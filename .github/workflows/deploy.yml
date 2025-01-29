@@ -23,8 +23,20 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /home/ubuntu
+            # Check if the repo directory exists
+            if [ ! -d "/home/ubuntu/my-node-app" ]; then
+              # Clone the repo if it doesn't exist
+              cd /home/ubuntu
+              git clone https://github.com/${{ github.repository }} my-node-app
+            fi
+
+            # Navigate to the app directory
+            cd /home/ubuntu/my-node-app
+
+            # Pull the latest changes if the repo already exists
             git pull origin main
+
+            # Install dependencies and restart app
             npm install
             pm2 restart all  # or any other method to restart your Node.js app
           EOF
