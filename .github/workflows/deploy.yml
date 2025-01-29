@@ -42,3 +42,5 @@ jobs:
           EOF
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
+
+          
