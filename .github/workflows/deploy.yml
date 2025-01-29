@@ -20,12 +20,6 @@ jobs:
         env:
           EC2_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
-      - name: Add EC2 server to known hosts
-        run: |
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}  # The public IP of your EC2 instance
-
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
