@@ -27,7 +27,7 @@ jobs:
             if [ ! -d "/home/ubuntu/my-node-app" ]; then
               # Clone the repo if it doesn't exist
               cd /home/ubuntu
-              git clone https://github.com/${{ github.repository }} my-node-app
+              git clone https://oauth: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@github.com/${{ github.repository }} my-node-app
             fi
 
             # Navigate to the app directory
