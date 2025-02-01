@@ -3,7 +3,7 @@
   hosts: docker_host
   become: true
   vars:
-    github_repo: "https://github.com/arsalan94/nodejs.git"  # Change to your repo
+    github_repo: "https://github.com/itsArsalanMD/nodejs"  # Change to your repo
     clone_path: "/home/ubuntu/nodejs"  # Where repo will be cloned
     image_name: arsalan94/nodejs
     image_tag: latest
