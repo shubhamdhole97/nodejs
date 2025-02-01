@@ -1,0 +1,68 @@
+---
+- name: Build, push, and run Docker container on remote EC2 instance
+  hosts: docker_host
+  become: true
+  vars:
+    image_name: arsalan94/nodejs
+    image_tag: latest
+    container_name: nodejs
+    dockerfile_path: /   # Adjust if necessary
+    dockerhub_username: "arsalan94"
+    dockerhub_password: "Arsalan@1234$"  # Consider using Ansible Vault for this!
+  tasks:
+    - name: Ensure Docker is installed
+      package:
+        name: docker
+        state: present
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Log in to Docker Hub
+      docker_login:
+        username: "{{ dockerhub_username }}"
+        password: "{{ dockerhub_password }}"
+
+    - name: Build Docker image
+      docker_image:
+        build:
+          path: "{{ dockerfile_path }}"
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
+        push: no   # Pushing is handled explicitly below
+      register: build_result
+
+    - name: Tag the image
+      command: docker tag {{ image_name }}:{{ image_tag }} {{ image_name }}:{{ image_tag }}
+      when: build_result.changed
+
+    - name: Push Docker image to Docker Hub
+      docker_image:
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
+        push: yes
+
+    - name: Stop existing container (if any)
+      docker_container:
+        name: "{{ container_name }}"
+        state: stopped
+        force_kill: true
+      ignore_errors: yes
+
+    - name: Remove existing container (if any)
+      docker_container:
+        name: "{{ container_name }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Run the container from the new image
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}:{{ image_tag }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "3000:3000"  # Adjust ports as needed
