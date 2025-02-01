@@ -18,6 +18,7 @@
 
     - name: Build Docker image
       docker_image:
+        source: build
         build:
           path: "{{ dockerfile_path }}"
         name: "{{ image_name }}"
