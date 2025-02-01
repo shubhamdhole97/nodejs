@@ -10,16 +10,6 @@
     dockerhub_username: "arsalan94"
     dockerhub_password: "Arsalan@1234$"  # Consider using Ansible Vault for this!
   tasks:
-    - name: Ensure Docker is installed
-      package:
-        name: docker
-        state: present
-
-    - name: Start and enable Docker service
-      service:
-        name: docker
-        state: started
-        enabled: true
 
     - name: Log in to Docker Hub
       docker_login:
