@@ -6,7 +6,7 @@
     image_name: arsalan94/nodejs
     image_tag: latest
     container_name: nodejs
-    dockerfile_path: /   # Adjust if necessary
+    dockerfile_path: /home/ubuntu/nodejs   # Adjust if necessary
     dockerhub_username: "arsalan94"
     dockerhub_password: "Arsalan@1234$"  # Consider using Ansible Vault for this!
   tasks:
