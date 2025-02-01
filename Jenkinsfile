@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-        // You can define any environment variables if needed.
-        // For example, DOCKERHUB_CREDENTIALS_ID, DOCKERHUB_USERNAME, etc.
-    }
     stages {
         stage('Checkout') {
             steps {
