@@ -5,9 +5,9 @@
   vars:
     github_repo: "https://github.com/shubhamdhole97/nodejs.git"
     clone_path: "/home/ubuntu/nodejs"
-    image_name: "shubhamdhole97/imagenavbanvla"
+    image_name: "shubhamdhole97/imagenavbanvlaahe"
     image_tag: "latest"
-    container_name: "containernameahe"
+    container_name: "nodejs"
     dockerhub_username: "shubhamdhole97"
     dockerhub_password: !vault |
       $ANSIBLE_VAULT;1.1;AES256
