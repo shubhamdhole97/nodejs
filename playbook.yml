@@ -8,7 +8,7 @@
     image_name: shubhamdhole97/nodejss
     image_tag: latest
     container_name: nodejs
-    dockerhub_username: "Shubhamdhole97"
+    dockerhub_username: "shubhamdhole97"
     dockerhub_password: "Shubham@111"  # Use Ansible Vault instead for security!
   tasks:
 
