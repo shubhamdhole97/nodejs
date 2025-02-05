@@ -5,7 +5,7 @@
   vars:
     github_repo: "https://github.com/shubhamdhole97/nodejs.git"  # Change to your repo
     clone_path: "/home/ubuntu/nodejs"  # Where repo will be cloned
-    image_name: shubhamdhole/nodejs-image
+    image_name: shubhamdhole/l5task
     image_tag: latest
     container_name: nodejs
     dockerhub_username: "shubhamdhole97"
