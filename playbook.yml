@@ -1,5 +1,5 @@
 ---
-- name: Clone repo, build, push, and run Docker container on remote EC2 instance
+- name: Clone rrepo, build, push, and run Docker container on remote EC2 instance
   hosts: docker_host
   become: true
   vars:
