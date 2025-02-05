@@ -10,7 +10,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 withCredentials([sshUserPrivateKey(
-                    credentialsId: 'Jenkins',
+                    credentialsId: 'jenkins',
                     keyFileVariable: 'SSH_KEY'
                 )]) {
                     sh '''
