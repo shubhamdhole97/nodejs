@@ -3,18 +3,16 @@
   hosts: docker_host
   become: true
   vars:
-    github_repo: "https://github.com/shubhamdhole97/nodejs.git"
-    clone_path: "/home/ubuntu/nodejs"
-    image_name: "shubhamdhole97/imagenavbanvlaahe"
-    image_tag: "latest"
-    container_name: "nodejs"
+    github_repo: "https://github.com/shubhamdhole97/nodejs.git"  # Change to your repo
+    clone_path: "/home/ubuntu/nodejs"  # Where repo will be cloned
+    image_name: shubhamdhole97/nodejss
+    image_tag: latest
+    container_name: nodejs
     dockerhub_username: "shubhamdhole97"
-    dockerhub_password: !vault |
-      $ANSIBLE_VAULT;1.1;AES256
-      ... # Encrypted password here
-
+    dockerhub_password: "Vishal@123"  # Use Ansible Vault instead for security!
   tasks:
-    - name: Install required packages
+
+    - name: Install Git (if not installed)
       package:
         name: git
         state: present
@@ -23,34 +21,33 @@
       git:
         repo: "{{ github_repo }}"
         dest: "{{ clone_path }}"
-        version: main
-        force: yes
+        version: main  # Change branch if necessary
+        force: yes  # Overwrites existing content
 
     - name: Log in to Docker Hub
       docker_login:
         username: "{{ dockerhub_username }}"
         password: "{{ dockerhub_password }}"
-      retries: 3
-      delay: 10
 
-    - name: Build Docker image
+    - name: Build Docker image from cloned repository
       docker_image:
-        name: "{{ image_name }}"
-        tag: "{{ image_tag }}"
         source: build
         build:
           path: "{{ clone_path }}"
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
         push: no
       register: build_result
 
-    - name: Push Docker image to Docker Hub
-      docker_image:
-        name: "{{ image_name }}"
-        tag: "{{ image_tag }}"
-        push: yes
+    - name: Tag the image
+      command: docker tag {{ image_name }}:{{ image_tag }} {{ image_name }}:{{ image_tag }}
       when: build_result.changed
 
-    - name: Stop existing container (if running)
+    - name: Push Docker image to Docker Hub
+      command: docker push {{ image_name }}:{{ image_tag }}
+
+
+    - name: Stop existing container (if any)
       docker_container:
         name: "{{ container_name }}"
         state: stopped
