@@ -5,7 +5,7 @@
   vars:
     github_repo: "https://github.com/shubhamdhole97/nodejs.git"
     clone_path: "/home/ubuntu/nodejs"
-    image_name: "dockerimageaahehi"
+    image_name: "shubhamdhole97/imagenavbanvla"
     image_tag: "latest"
     container_name: "containernameahe"
     dockerhub_username: "shubhamdhole97"
