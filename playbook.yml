@@ -1,15 +1,15 @@
----
 - name: Clone repo, build, push, and run Docker container on remote EC2 instance
   hosts: docker_host
   become: true
   vars:
-    github_repo: "https://github.com/shubhamdhole97/nodejs.git"  # Change to your repo
-    clone_path: "/home/ubuntu/nodejs"  # Where repo will be cloned
+    github_repo: "https://github.com/shubhamdhole97/nodejs.git"
+    clone_path: "/home/ubuntu/nodejs"
     image_name: shubhamdhole97/nodejss
     image_tag: latest
     container_name: nodejs
     dockerhub_username: "shubhamdhole97"
-    dockerhub_password: "rmasasa"  # Use Ansible Vault instead for security!
+  vars_files:
+    - vault.yml  # Load encrypted variables
   tasks:
 
     - name: Install Git (if not installed)
@@ -21,13 +21,13 @@
       git:
         repo: "{{ github_repo }}"
         dest: "{{ clone_path }}"
-        version: main  # Change branch if necessary
-        force: yes  # Overwrites existing content
+        version: main
+        force: yes
 
     - name: Log in to Docker Hub
       docker_login:
         username: "{{ dockerhub_username }}"
-        password: "{{ dockerhub_password }}"
+        password: "{{ vault_dockerhub_password }}"
 
     - name: Build Docker image from cloned repository
       docker_image:
@@ -45,7 +45,6 @@
 
     - name: Push Docker image to Docker Hub
       command: docker push {{ image_name }}:{{ image_tag }}
-
 
     - name: Stop existing container (if any)
       docker_container:
