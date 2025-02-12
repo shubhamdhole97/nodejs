@@ -14,7 +14,7 @@ pipeline {
                     keyFileVariable: 'SSH_KEY'
                 )]) {
                     sh '''
-                        ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini playbook.yml  \
+                        ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini playbook.yml --vault-password-file ~/.vault_pass  \
                           -u ubuntu --private-key $SSH_KEY
                     '''
                 }
