@@ -3,33 +3,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/shubhamdhole97/nodejs.git'
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                    sudo apt update
-                    sudo apt install -y ansible
-                '''
+                // Check out code from GitHub
+                checkout scm
             }
         }
         stage('Run Ansible Playbook') {
             steps {
-                withCredentials([
-                    sshUserPrivateKey(credentialsId: 'jenkins', keyFileVariable: 'SSH_KEY'),
-                    string(credentialsId: 'VAULT_PASSWORD', variable: 'VAULT_PASS')
-                ]) {
+                withCredentials([sshUserPrivateKey(
+                    credentialsId: 'jenkins',
+                    keyFileVariable: 'SSH_KEY'
+                )]) {
                     sh '''
-                        set -e
-                        export ANSIBLE_HOST_KEY_CHECKING=False
-                        echo "$VAULT_PASS" > /tmp/.vault_pass
-                        chmod 600 /tmp/.vault_pass
-
-                        ansible-playbook -i inventory.ini playbook.yml --vault-password-file /tmp/.vault_pass \
-                          -u ubuntu --private-key $SSH_KEY || { echo "Ansible Playbook Failed"; exit 1; }
-
-                        rm -f /tmp/.vault_pass
+                        ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.ini playbook.yml \
+                          -u ubuntu --private-key $SSH_KEY
                     '''
                 }
             }
@@ -37,10 +23,10 @@ pipeline {
     }
     post {
         success {
-            echo '✅ Pipeline completed successfully.'
+            echo 'Pipeline completed successfully.'
         }
         failure {
-            echo '❌ Pipeline failed. Check logs for errors.'
+            echo 'Pipeline failed.'
         }
     }
 }
